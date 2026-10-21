@@ -824,6 +824,23 @@ def _compress_source_code(text: str, budget: int, query: str | None = None, _dep
 
     lines = text.split("\n")
     n = len(lines)
+
+    # ── Preprocess: strip comment blocks to first line only ──────
+    # Comments score high via BMX+ because their natural-language
+    # vocabulary is lexically distinctive — they crowd out code.
+    # Keep the first line of each contiguous comment block; blank the rest.
+    in_comment = False
+    for i in range(n):
+        stripped = lines[i].strip()
+        is_comment = stripped.startswith(("#", "//"))
+        if is_comment and not in_comment:
+            in_comment = True  # first line of block — keep
+        elif is_comment and in_comment:
+            lines[i] = ""  # subsequent comment line — blank out
+        elif stripped:
+            in_comment = False  # non-comment, non-blank line ends the block
+    # Rebuild text for scoring (line numbers preserved via blanks)
+    text = "\n".join(lines)
     total_chars = sum(len(l) for l in lines)
 
     # ── Phase 0: Parse blocks ──────────────────────────────────────

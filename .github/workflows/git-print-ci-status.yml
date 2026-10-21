@@ -2,8 +2,9 @@ name: Git-Print CI Status
 # git-print:ci-status
 #
 # Auto-installed by `git-print install`. When a watched CI workflow FAILS on a
-# pull request, this builds a CI-failure report (status + failure annotations,
-# changed files, commits) and uploads it as the "Git-Print-CI-Status" artifact.
+# pull request, this builds a CI-failure report (status, failure annotations +
+# extracted job logs, changed files, commits) and uploads it as the
+# "Git-Print-CI-Status" artifact.
 #
 #   * EDIT workflows: below to match the name: of YOUR CI workflow(s). Default "CI".
 #   * This file must exist on the repo's DEFAULT branch to take effect.
